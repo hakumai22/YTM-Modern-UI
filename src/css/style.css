@@ -11,7 +11,7 @@
   font-family: 'SF Pro Display', 'Inter', 'Noto Sans JP';
 }
 
-/* === 既存レイアウト === */
+/* === 背景ぼかし === */
 #ytm-custom-bg {
   position: fixed;
   top: 0;
@@ -23,12 +23,30 @@
   z-index: 1000;
   background-color: #050505;
   filter: blur(80px) brightness(0.5) saturate(140%);
-  /* 背景が大きく動いても端が出ないように少し拡大 */
   transform: scale(1.15);
   pointer-events: none;
   display: none;
 }
 
+/* 背景動くやつ*/
+@keyframes ytmBgDrift {
+  0% {
+    transform: scale(1.15) translate3d(-3%, -3%, 0);
+  }
+  50% {
+    transform: scale(1.15) translate3d(4%, 2%, 0);
+  }
+  100% {
+    transform: scale(1.15) translate3d(-2%, 4%, 0);
+  }
+}
+
+body.ytm-custom-layout #ytm-custom-bg {
+  display: block !important;
+  animation: ytmBgDrift 40s ease-in-out infinite alternate;
+}
+
+/* === メインレイアウト === */
 #ytm-custom-wrapper {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   display: none; flex-direction: row; justify-content: center; align-items: center;
@@ -192,7 +210,7 @@ body.ytm-custom-layout ytmusic-search-box {
   font-weight: 600;
 }
 
-/* 翻訳アニメーション */
+/* 翻訳アニメーション出すやつ */
 body.ytm-custom-layout.ytm-has-timestamp .lyric-line .lyric-translation {
     opacity: 0;
     max-height: 0;
@@ -209,7 +227,7 @@ body.ytm-custom-layout.ytm-has-timestamp .lyric-line.show-translation .lyric-tra
     margin-top: 6px;
 }
 
-/* 1文字ずつ光る演出 */
+/* 1文字ずつ光るなんかよさげな演出 */
 body.ytm-custom-layout .lyric-line .lyric-char {
     display: inline-block;
     transition:
@@ -227,7 +245,7 @@ body.ytm-custom-layout .lyric-line.active .lyric-char.char-active {
     text-shadow: 0 0 12px rgba(255,255,255,0.8);
 }
 
-/* プレーヤーバーのスタイル */
+/* === プレーヤーバー === */
 body.ytm-custom-layout ytmusic-player-bar {
   position: fixed !important; 
   bottom: 40px !important;
@@ -249,7 +267,7 @@ body.ytm-custom-layout ytmusic-player-bar {
   z-index: 2000 !important;
   visibility: visible !important;
   opacity: 1 !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 body.ytm-custom-layout .left-controls {
@@ -257,31 +275,39 @@ body.ytm-custom-layout .left-controls {
     justify-content: flex-start !important;
 }
 
-body.ytm-custom-layout .right-controls {
-    flex: 0 0 auto !important;
-    justify-content: flex-end !important;
-    gap: 10px !important;  /* ボタンと音量バーの間隔を小さく */
-    align-items: center !important;
-}
-
-/* 右側の音量スライダー */
-body.ytm-custom-layout .right-controls tp-yt-paper-slider {
-    max-width: 150px !important;
-}
-
-/* 再生位置バーレイアウト */
 body.ytm-custom-layout .middle-controls { 
     flex: 1 1 auto !important; 
-    justify-content: center !っと; 
+    justify-content: center !important; 
     margin: 0 15px !important;
     max-width: 600px !important;
     padding: 0 5px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    overflow: visible !important;
 }
+
+/* ★ いいね / わるいいね の順番整理 */
+body.ytm-custom-layout ytmusic-player-bar .middle-controls ytmusic-toggle-button-renderer {
+    flex: 0 0 auto !important;
+}
+
+body.ytm-custom-layout ytmusic-player-bar .middle-controls ytmusic-toggle-button-renderer:nth-of-type(1) {
+    order: 1;
+    margin-right: 4px;
+}
+body.ytm-custom-layout ytmusic-player-bar .middle-controls ytmusic-toggle-button-renderer:nth-of-type(2) {
+    order: 2;
+    margin-right: 8px;
+}
+
+/* 再生位置スライダー */
 body.ytm-custom-layout .middle-controls tp-yt-paper-slider {
-    width: calc(100% - 20px) !important;
+    order: 3;
+    width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
     height: 40px !important;
     display: flex !important;
     align-items: center !important;
@@ -289,7 +315,7 @@ body.ytm-custom-layout .middle-controls tp-yt-paper-slider {
 
 body.ytm-custom-layout ytmusic-player-bar tp-yt-iron-icon,
 body.ytm-custom-layout ytmusic-player-bar .time-info,
-body.ytm-custom-layout ytmusic-player-bar button {
+body.ytm-custom-layout ytmusic-player-bar button:not(#my-mode-toggle) {
     color: #ffffff !important;
     fill: #ffffff !important;
     opacity: 1 !important;
@@ -301,12 +327,77 @@ body.ytm-custom-layout ytmusic-player-bar .content-info-wrapper {
     display: none !important;
 }
 
-/* IMMERSION トグル非表示（※音量操作とかぶります） */
-#my-mode-toggle {
-    display: none !important;
+body.ytm-custom-layout ytmusic-player-bar .right-controls {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
 }
 
-/* === アップロードメニュー === */
+/* IMMERSION  */
+#my-mode-toggle {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* 音量アイコン */
+body.ytm-custom-layout ytmusic-player-bar .right-controls #my-mode-toggle {
+  order: 20;
+}
+
+
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="音量"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="ミュート"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="volume"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="Volume"] {
+  order: 21;
+  margin-left: 2px;
+}
+
+/* 他のボタン（リピート / シャッフル / ▼）とか */
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="リピート"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="繰り返し"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="repeat"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="Repeat"] {
+  order: 22;
+}
+
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="シャッフル"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="シャッフル再生"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="shuffle"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+ytmusic-toggle-button-renderer[aria-label*="Shuffle"] {
+  order: 23;
+}
+
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+tp-yt-paper-icon-button[aria-label*="メニュー"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+tp-yt-paper-icon-button[aria-label*="その他"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+tp-yt-paper-icon-button[aria-label*="More"],
+body.ytm-custom-layout ytmusic-player-bar .right-controls
+tp-yt-paper-icon-button[aria-label*="menu"] {
+  order: 24;
+}
+
+/* === アップロードメニュー（グラス UI） === */
 .ytm-upload-menu {
     position: absolute;
     bottom: 52px;
@@ -370,7 +461,7 @@ body.ytm-custom-layout ytmusic-player-bar .content-info-wrapper {
     opacity: 0.6;
 }
 
-/* === 歌詞削除用グラスダイアログ === */
+/* === 歌詞削除用ダイアログ === */
 .ytm-confirm-dialog {
     position: absolute;
     bottom: 52px;
@@ -432,22 +523,4 @@ body.ytm-custom-layout ytmusic-player-bar .content-info-wrapper {
 }
 .ytm-confirm-btn.danger:hover {
     background: rgba(255, 61, 80, 1);
-}
-
-/* === 背景をゆっくり動かす === */
-@keyframes ytmBgDrift {
-  0% {
-    transform: scale(1.15) translate3d(-3%, -3%, 0);
-  }
-  50% {
-    transform: scale(1.15) translate3d(4%, 2%, 0);
-  }
-  100% {
-    transform: scale(1.15) translate3d(-2%, 4%, 0);
-  }
-}
-
-body.ytm-custom-layout #ytm-custom-bg {
-  display: block !important;
-  animation: ytmBgDrift 40s ease-in-out infinite alternate;
 }
