@@ -47,7 +47,7 @@ body.ytm-custom-layout #ytm-custom-bg {
   animation: ytmBgDrift 40s ease-in-out infinite alternate;
 }
 
-/* Lyrics候補バッジ用の軽いアニメ */
+
 @keyframes ytmLyricsBounce {
   0%, 100% { transform: translateY(0); }
   30% { transform: translateY(-2px); }
@@ -95,7 +95,6 @@ body.ytm-custom-layout.ytm-no-lyrics #ytm-custom-left-col {
   transition: transform 0.5s ease;
 }
 
-/* 元の YTM UI を隠す（ナビ以外） */
 body.ytm-custom-layout #player-bar-background,
 body.ytm-custom-layout #guide-wrapper,
 body.ytm-custom-layout ytmusic-mini-guide-renderer,
@@ -109,7 +108,6 @@ body.ytm-custom-layout .side-panel {
   pointer-events: none !important;
 }
 
-/* ナビバーだけ残す */
 body.ytm-custom-layout ytmusic-nav-bar {
   visibility: visible !重要;
   opacity: 1 !important;
@@ -137,7 +135,6 @@ body.ytm-custom-layout ytmusic-search-box {
   margin-left: 96px;
 }
 
-/* 左カラム（横向き：大きいジャケット＋中央寄せタイトル） */
 #ytm-custom-left-col {
   display: flex;
   flex-direction: column;
@@ -162,7 +159,6 @@ body.ytm-custom-layout ytmusic-search-box {
   object-fit: cover;
 }
 
-/* 曲情報（横向き：中央寄せ） */
 #ytm-custom-info-area {
   display: flex;
   flex-direction: column;
@@ -188,7 +184,6 @@ body.ytm-custom-layout ytmusic-search-box {
   margin-bottom: 24px;
 }
 
-/* 上部の Lyrics / ゴミ箱 / 設定 ボタン */
 #ytm-btn-area {
   display: flex;
   gap: 10px;
@@ -317,7 +312,7 @@ body.ytm-custom-layout ytmusic-search-box {
   transform: translateX(18px);
 }
 
-/* 言語ピル */
+
 .ytm-lang-section {
   margin-top: 10px;
 }
@@ -422,7 +417,6 @@ body.ytm-custom-layout ytmusic-search-box {
   font-weight: 600;
 }
 
-/* タイムスタンプ有り時の翻訳アニメ */
 body.ytm-custom-layout.ytm-has-timestamp .lyric-line .lyric-translation {
   opacity: 0;
   max-height: 0;
@@ -440,7 +434,7 @@ body.ytm-custom-layout.ytm-has-timestamp .lyric-line.show-translation .lyric-tra
   margin-top: 6px;
 }
 
-/* 1文字ずつ光る演出 */
+/* 1文字ずつ光るしゃれおつな演出 */
 body.ytm-custom-layout .lyric-line .lyric-char {
   display: inline-block;
   transition:
@@ -471,7 +465,7 @@ body.ytm-custom-layout.ytm-no-timestamp .lyric-line {
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Loading / 歌詞なしメッセージ */
+/* Loading  */
 .lyric-loading {
   display: flex;
   flex-direction: column;
@@ -519,18 +513,17 @@ body.ytm-custom-layout ytmusic-player-bar {
   overflow: visible !important;
 }
 
-/* 左側：前後 / 再生ボタン */
+/* 再生ボタン */
 body.ytm-custom-layout .left-controls {
   flex: 0 0 auto !important;
   justify-content: flex-start !important;
 }
 
-/* 中央側の再生ボタンは隠す（2 個目を消す） */
 body.ytm-custom-layout ytmusic-player-bar .middle-controls ytmusic-play-button-renderer {
   display: none !important;
 }
 
-/* 中央エリア：シークバー中心 */
+/* シークバー */
 body.ytm-custom-layout .middle-controls {
   flex: 1 1 auto !important;
   justify-content: center !important;
@@ -895,9 +888,7 @@ body:not(.ytm-custom-layout) ytmusic-player-bar .right-controls .toggle-player-p
 }
 
 /* =========================================
- * 縦画面レイアウト（Apple Music 風）
- * サムネ左／曲名・アーティスト右／その下に Lyrics & ゴミ箱
- * サムネと上部ブロックの高さをそろえる
+ * 縦長ディスプレイ専用だよ
  * ======================================= */
 @media (orientation: portrait) {
   body.ytm-custom-layout #ytm-custom-wrapper {
@@ -908,7 +899,7 @@ body:not(.ytm-custom-layout) ytmusic-player-bar .right-controls .toggle-player-p
     gap: 24px;
   }
 
-  /* 上部ブロック：サムネ左・テキスト右・高さ72pxでそろえる */
+  /* 高さそろえて見栄えを良くする */
   body.ytm-custom-layout #ytm-custom-left-col {
     width: 100%;
     max-width: 520px;
@@ -917,7 +908,7 @@ body:not(.ytm-custom-layout) ytmusic-player-bar .right-controls .toggle-player-p
     justify-content: flex-start;
     gap: 12px;
     text-align: left;
-    min-height: 72px;              /* サムネと同じ高さ */
+    min-height: 72px;
   }
 
   body.ytm-custom-layout #ytm-artwork-container {
@@ -926,15 +917,15 @@ body:not(.ytm-custom-layout) ytmusic-player-bar .right-controls .toggle-player-p
     border-radius: 14px;
     margin: 0;
     flex-shrink: 0;
-    align-self: stretch;           /* 親の高さにフィット */
+    align-self: stretch;
   }
 
   body.ytm-custom-layout #ytm-custom-info-area {
     display: flex;
     flex-direction: column;
-    justify-content: center;       /* 上下中央 */
+    justify-content: center;
     align-items: flex-start;
-    min-height: 72px;             /* サムネと同じ高さ */
+    min-height: 72px;
   }
 
   body.ytm-custom-layout #ytm-custom-title {
@@ -951,14 +942,14 @@ body:not(.ytm-custom-layout) ytmusic-player-bar .right-controls .toggle-player-p
     text-align: left;
   }
 
-  /* ヘッダーの下に Lyrics / ゴミ箱 ボタン */
+  /* ゴミ箱 ボタン */
   body.ytm-custom-layout #ytm-btn-area {
     justify-content: flex-start;
     margin-top: 6px;
     gap: 8px;
   }
 
-  /* 歌詞はヘッダーの下フル幅 */
+  /* 歌詞をヘッダー野下へ */
   body.ytm-custom-layout #my-lyrics-container {
     width: 100%;
     max-width: 520px;
@@ -966,7 +957,7 @@ body:not(.ytm-custom-layout) ytmusic-player-bar .right-controls .toggle-player-p
     padding-top: 10vh;
   }
 
-  /* プレイヤーバーは少し細め中央 */
+  /* プレイヤバー */
   body.ytm-custom-layout ytmusic-player-bar {
     width: 100% !important;
     max-width: 640px !important;
