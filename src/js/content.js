@@ -10,7 +10,9 @@
     mode: true,
     mainLang: 'original',
     subLang: 'en',
-    uiLang: 'ja'
+    uiLang: 'ja',
+    syncOffset:3000,
+    saveSyncOffset: false
   };
 
   // フォールバック言語
@@ -42,7 +44,9 @@
       settings_sub_lang: "サブ言語 (小さく表示)",
       settings_save: "保存",
       settings_reset: "リセット",
-      settings_saved: "設定を保存しました"
+      settings_saved: "設定を保存しました",
+      settings_sync_offset: "歌詞同期オフセット",
+      settings_sync_offset_save: "歌詞同期オフセットを保存する"
     }
   };
 
@@ -2158,6 +2162,15 @@
           <button class="ytm-lang-pill" data-value="ko">한국어</button>
         </div>
       </div>
+      <div class="setting-item">
+      <input type="number" id="sync-offset-input" placeholder="${t('settings_sync_offset')} (ms)">
+      </div>
+      <div class="setting-item">
+        <label class="toggle-label">
+          <span>${t('settings_sync_offset_save')}</span>
+          <input type="checkbox" id="sync-offset-save-toggle">
+        </label>
+      </div>
       <div class="setting-item" style="margin-top:15px;">
         <input type="password" id="deepl-key-input" placeholder="DeepL API Key">
       </div>
@@ -2184,6 +2197,8 @@
 
   document.getElementById('deepl-key-input').value = config.deepLKey || '';
   document.getElementById('trans-toggle').checked = config.useTrans;
+  document.getElementById('sync-offset-input').valueAsNumber = config.syncOffset || 0;
+  document.getElementById('sync-offset-save-toggle').checked = config.syncOffsetSave;
 
   setupLangPills('main-lang-group', config.mainLang, v => { config.mainLang = v; });
   setupLangPills('sub-lang-group', config.subLang, v => { config.subLang = v; });
@@ -2525,10 +2540,13 @@
 
       if (timeOffset > 0 && t < timeOffset) {
         timeOffset = 0;
+        if(!config.saveSyncOffset){
+          config.syncOffset = 0;
+        }
       }
 
       t = Math.max(0, t - timeOffset);
-
+      t = t + (config.syncOffset / 1000);
       if (document.body.classList.contains('ytm-custom-layout') && lyricsData.length && hasTimestamp && !v.paused && !v.ended) {
         if (t !== lastTimeForChars) {
           lastTimeForChars = t;
