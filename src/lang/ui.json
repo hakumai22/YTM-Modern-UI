@@ -59,7 +59,7 @@
     "settings_saved": "Settings saved",
     "settings_sync_offset": "Lyrics sync offset",
     "settings_sync_offset_save": "Don't reset offset when the song changes",
-    "settings_fast_mode": "Fast Load Mode (May reduce accuracy for covers)"]
+    "settings_fast_mode": "Fast Load Mode (May reduce accuracy for covers)"
   },
   "ko": {
     "unit_hour": "시간",
