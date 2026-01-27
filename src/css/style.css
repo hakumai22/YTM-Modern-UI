@@ -977,7 +977,7 @@ tp-yt-paper-toast.style-scope {
   border-radius: 10px !important;
   transform: translateY(0px) !important; /* 下から上に行くアニメーションをオーバーライド */
   margin-top: -20px !important;
-  left:1vh !important;
+  left: 1vh !important;
 }
 body.ytm-custom-layout tp-yt-paper-toast.style-scope {
   margin-bottom: -16px !important;
