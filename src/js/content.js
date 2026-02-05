@@ -2564,7 +2564,6 @@
       if(switcher) switcher.classList.remove('notpremium');
     }
     else {
-      
       if(switcher) switcher.classList.add('notpremium');
     }
     return !requireSignIn || !notPremium;
