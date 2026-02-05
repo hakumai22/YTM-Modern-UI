@@ -2435,7 +2435,6 @@
       movieObserver = null;
       const switcher = document.querySelector("ytmusic-av-toggle");
       const video = document.querySelector("ytmusic-player#player");
-      const switcherParent = document.querySelector("#ytm-custom-info-area");
       const originParent = document.querySelector("div#main-panel");
       const originSwitcherTarget = originParent.children[1];
       const originTarget = originParent.children[2];
