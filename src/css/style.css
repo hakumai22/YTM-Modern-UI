@@ -268,7 +268,6 @@ body.ytm-custom-layout ytmusic-av-toggle[playback-mode=ATV_PREFERRED] .song-butt
   overflow-wrap: break-word;
   
   width: 100%;
-  max-width: 340px;
   margin-left: auto;
   margin-right: auto;
 
@@ -2344,4 +2343,18 @@ body.ytm-custom-layout::before {
 body.ytm-custom-layout ytmusic-nav-bar .left-content > tp-yt-paper-icon-button,
 body.ytm-custom-layout ytmusic-nav-bar .left-content #guide-button {
   display: none !important;
+}
+
+
+
+
+.lyric-line {
+  text-wrap: balance !important;
+  word-break: keep-all;     
+  overflow-wrap: break-word; 
+}
+
+.lyric-phrase {
+  display: inline-block;       
+  margin: 0 1px;           
 }
