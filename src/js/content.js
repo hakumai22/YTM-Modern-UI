@@ -2558,7 +2558,7 @@
     const switcher = document.querySelector("ytmusic-av-toggle");
     const requireSignIn = !!document.querySelector('ytmusic-guide-signin-promo-renderer');
     const primarySection = document.querySelector('#mini-guide ytmusic-guide-section-renderer[is-primary] div#items');
-    const notPremium = primarySection ? primarySection.childNodes.length >= 4 : false;
+    const notPremium = primarySection ? primarySection.childNodes.length >= 4 : true;
     if(!requireSignIn && !notPremium){
       if(switcher) switcher.classList.remove('notpremium');
     }
