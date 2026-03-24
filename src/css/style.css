@@ -207,9 +207,9 @@ body.ytm-custom-layout .av-toggle.ytmusic-av-toggle{
   background: rgba(200, 200, 200, 0.1);
   backdrop-filter: blur(20px) saturate(100%);
 }
-body.ytm-custom-layout .song-button.ytmusic-av-toggle, .video-button.ytmusic-av-toggle{
+body.ytm-custom-layout .song-button.ytmusic-av-toggle, body.ytm-custom-layout .video-button.ytmusic-av-toggle{
   background-color: transparent !important;
-  height: 40px !important;
+  height: 38px !important;
 }
 body.ytm-custom-layout ytmusic-av-toggle[playback-mode=OMV_PREFERRED] .video-button.ytmusic-av-toggle,
 body.ytm-custom-layout ytmusic-av-toggle[playback-mode=ATV_PREFERRED] .song-button.ytmusic-av-toggle {
@@ -1121,8 +1121,9 @@ tp-yt-paper-listbox.ytmusic-menu-popup-renderer {
   transition: opacity 0.16s ease-out, transform 0.16s ease-out;
   overflow: visible;
 }
-
-
+.ytm-upload-menu.moviemode{
+  inset: 53px auto auto 0px !important;
+}
 .ytm-upload-menu.visible {
   opacity: 1;
   transform: translateY(0) scale(1);
