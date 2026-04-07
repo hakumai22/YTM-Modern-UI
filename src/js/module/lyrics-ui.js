@@ -1723,11 +1723,11 @@ async function applyLyricsText(rawLyrics) {
     menu.innerHTML = `
       <div class="ytm-upload-menu-title">Lyrics</div>
       <button class="ytm-upload-menu-item" data-action="local">
-        <span class="ytm-upload-menu-item-icon">💾</span>
+        <span class="ytm-upload-menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: -0.15em; margin-right: 6px;"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg></span>
         <span>ローカル歌詞読み込み / ReadLyrics</span>
       </button>
       <button class="ytm-upload-menu-item" data-action="add-sync">
-        <span class="ytm-upload-menu-item-icon">✨</span>
+        <span class="ytm-upload-menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: -0.15em; margin-right: 6px;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></span>
         <span>歌詞同期を追加 / AddTiming</span>
       </button>
       <div class="ytm-upload-menu-locks" style="display:none;">
@@ -1736,7 +1736,7 @@ async function applyLyricsText(rawLyrics) {
       </div>
       <div class="ytm-upload-menu-separator"></div>
       <button class="ytm-upload-menu-item" data-action="fix">
-        <span class="ytm-upload-menu-item-icon">✏️</span>
+        <span class="ytm-upload-menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: -0.15em; margin-right: 6px;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>
         <span>歌詞の間違いを修正 / FixLyrics</span>
       </button>
       <div class="ytm-upload-menu-candidates" style="display:none;">
@@ -2073,158 +2073,186 @@ function renderSettingsPanel() {
     // 現在の曲IDがあるか確認（キャッシュ削除ボタンの制御用）
     const hasCurrentSong = !!currentKey;
 
+    // --- SVG Icons ---
+    const ICONS = {
+      visuals: `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5 11 5.67 11 6.5 10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5S18.33 12 17.5 12z"/></svg>`,
+      trans: `<svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>`,
+      data: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
+      save: `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>`,
+      trash: `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`
+    };
+
     ui.settings.innerHTML = `
-      <div class="settings-header">
-        <h3>${t('settings_title')}</h3>
-        <button id="ytm-settings-close-btn">×</button>
-      </div>
-      
-      <div class="settings-scroll-area">
+      <div class="settings-tabs">
+        <div class="settings-tabs-header">Settings</div>
+        <button class="settings-tab-btn active" data-tab="visuals">
+          ${ICONS.visuals} Visuals
+        </button>
+        <button class="settings-tab-btn" data-tab="translation">
+          ${ICONS.trans} Translation
+        </button>
+        <button class="settings-tab-btn" data-tab="data">
+          ${ICONS.data} Data & Reset
+        </button>
         
-        <div class="settings-section">
-          <div class="settings-section-title">Visuals</div>
-          <div class="settings-group-card">
-            
-            <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
-              <div style="width:100%; display:flex; justify-content:space-between;">
-                <span style="font-size:13px;">UI Language</span>
-                <div class="ytm-lang-group" id="ui-lang-group" style="background:transparent; padding:0;"></div>
-              </div>
-            </div>
-
-            <div class="setting-row" style="flex-direction:column; align-items:stretch; gap:12px;">
-              <div style="display:flex; justify-content:space-between; font-size:13px;">
-                <span>歌詞の太さ (Weight)</span>
-                <span id="weight-val" style="opacity:0.7;">${config.lyricWeight || 800}</span>
-              </div>
-              <input type="range" id="weight-slider" min="100" max="900" step="100" value="${config.lyricWeight || 800}" style="width:100%;">
-            </div>
-
-            <div class="setting-row">
-              <label class="toggle-label" style="width:100%;">
-                <span>${t('settings_left_align')}</span>
-                <input type="checkbox" id="left-align-toggle">
-              </label>
-            </div>
-
-            <div class="setting-row" style="flex-direction:column; align-items:stretch; gap:12px;">
-               <div style="display:flex; justify-content:space-between; font-size:13px;">
-                <span>背景の明るさ (Brightness)</span>
-                <span id="bright-val" style="opacity:0.7;">${Math.round((config.bgBrightness || 0.35) * 100)}%</span>
-              </div>
-              <input type="range" id="bright-slider" min="0.1" max="1.0" step="0.05" value="${config.bgBrightness || 0.35}" style="width:100%;">
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="settings-section-title">Translation & Features</div>
-          <div class="settings-group-card">
-            <div class="setting-row">
-              <label class="toggle-label" style="width:100%;">
-                <span>${t('settings_trans')}</span>
-                <input type="checkbox" id="trans-toggle">
-              </label>
-            </div>
-            
-            <div class="setting-row">
-              <label class="toggle-label" style="width:100%;">
-                <span>${t('settings_fast_mode')}</span>
-                <input type="checkbox" id="fast-mode-toggle">
-              </label>
-            </div>
-
-                        <div class="setting-row" id="shared-trans-row" style="flex-direction:column; align-items:stretch; gap:6px;">
-              <label class="toggle-label" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-                <span>${t('settings_shared_trans')}</span>
-                <input type="checkbox" id="shared-trans-toggle" style="transform:scale(1.15);">
-              </label>
-              <div id="shared-trans-note" style="font-size:11px; opacity:0.7; line-height:1.35; display:none; white-space:pre-line;"></div>
-
-              <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
-                <span style="font-size:12px; opacity:0.85;">共有翻訳 残り文字数</span>
-                <span id="community-remaining-val" style="font-size:12px; opacity:0.75;">--</span>
-              </div>
-              <div style="font-size:11px; opacity:0.65; line-height:1.35;">
-                <a href="https://immersionproject.coreone.work/" target="_blank" rel="noopener noreferrer"
-                   style="color:#8ab4ff; text-decoration:none;">文字数の提供</a> をお願いします
-              </div>
-            </div>
-
-             <div class="setting-row" style="flex-wrap:wrap; gap:10px;">
-                <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-                  <span style="font-size:13px;">${t('settings_sync_offset')}</span>
-                  <input type="number" id="sync-offset-input" placeholder="0" style="width:60px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; padding:4px; text-align:right;">
-                </div>
-                <label class="toggle-label" style="width:100%; margin-top:4px;">
-                  <span style="font-size:11px; opacity:0.7;">${t('settings_sync_offset_save')}</span>
-                  <input type="checkbox" id="sync-offset-save-toggle">
-                </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="settings-section-title">Translation Target</div>
-          <div class="settings-group-card">
-             <div class="setting-row" style="flex-direction:column; align-items:flex-start;">
-                <div class="ytm-lang-label">${t('settings_main_lang')}</div>
-                <div class="ytm-lang-group" id="main-lang-group" style="margin-top:6px;">
-                  <button class="ytm-lang-pill" data-value="original">Original</button>
-                  <button class="ytm-lang-pill" data-value="ja">日本語</button>
-                  <button class="ytm-lang-pill" data-value="en">English</button>
-                  <button class="ytm-lang-pill" data-value="ko">한국어</button>
-                </div>
-             </div>
-             <div class="setting-row" style="flex-direction:column; align-items:flex-start;">
-                <div class="ytm-lang-label">${t('settings_sub_lang')}</div>
-                <div class="ytm-lang-group" id="sub-lang-group" style="margin-top:6px;">
-                  <button class="ytm-lang-pill" data-value="original">Original</button>
-                  <button class="ytm-lang-pill" data-value="ja">日本語</button>
-                  <button class="ytm-lang-pill" data-value="en">English</button>
-                  <button class="ytm-lang-pill" data-value="ko">한국어</button>
-                  <button class="ytm-lang-pill" data-value="zh">中文</button>
-                </div>
-             </div>
-             
-             <div class="setting-row" style="display:block;">
-               <div style="font-size:12px; margin-bottom:4px; opacity:0.7;">DeepL API Key (Optional)</div>
-               <input type="password" id="deepl-key-input" class="setting-input-text" placeholder="DeepL API Key">
-             </div>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="settings-section-title">Data Management</div>
-          <div class="settings-group-card">
-            
-            <div class="setting-row" style="display:block;">
-              <button id="delete-current-cache-btn" class="settings-action-btn btn-danger" ${hasCurrentSong ? '' : 'disabled style="opacity:0.5; cursor:not-allowed;"'}>
-                🗑️ この曲の歌詞データを削除
-              </button>
-              <div style="font-size:10px; opacity:0.5; margin-top:4px; text-align:center;">
-                現在再生中の曲の歌詞キャッシュのみを削除します
-              </div>
-            </div>
-
-            <div class="setting-row" style="display:block; border-top:1px solid rgba(255,255,255,0.05);">
-               <button id="clear-all-btn" class="settings-action-btn" style="background:rgba(255,255,255,0.1); color:#fff;">
-                 設定をリセット (Reset All)
-               </button>
-            </div>
-          </div>
-        </div>
-        
-        <div style="padding: 10px 0 20px 0;">
-           <button id="save-settings-btn" class="settings-action-btn btn-primary" style="padding:12px; font-size:14px;">
+        <div style="margin-top: auto; padding-top: 20px;">
+           <button id="save-settings-btn" class="settings-action-btn btn-primary" style="padding:14px; font-size:14px; border-radius:12px; box-shadow:0 4px 12px rgba(0, 122, 255, 0.3); display:flex; align-items:center; justify-content:center; gap:8px;">
+             ${ICONS.save}
              ${t('settings_save')}
            </button>
         </div>
+      </div>
 
+      <div class="settings-panels">
+        <div class="settings-panels-header">
+          <h3>${t('settings_title')}</h3>
+          <button id="ytm-settings-close-btn" title="Close">×</button>
+        </div>
+        
+        <div class="settings-scroll-area">
+          
+          <div class="settings-panel active" id="panel-visuals">
+            <div class="settings-section-title">Visual Customization</div>
+            <div class="settings-group-card">
+              <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:12px;">
+                <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:13px; font-weight:500;">UI Language</span>
+                  <div class="ytm-lang-group" id="ui-lang-group" style="background:transparent; padding:0;"></div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label class="toggle-label" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <span>${t('settings_left_align')}</span>
+                  <input type="checkbox" id="left-align-toggle">
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-group-card">
+              <div class="setting-row" style="flex-direction:column; align-items:stretch;">
+                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:500;">
+                  <span>歌詞の太さ (Weight)</span>
+                  <span id="weight-val" style="opacity:0.6;">${config.lyricWeight || 800}</span>
+                </div>
+                <input type="range" id="weight-slider" min="100" max="900" step="100" value="${config.lyricWeight || 800}">
+              </div>
+              <div class="setting-row" style="flex-direction:column; align-items:stretch;">
+                 <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:500;">
+                  <span>背景の明るさ (Brightness)</span>
+                  <span id="bright-val" style="opacity:0.6;">${Math.round((config.bgBrightness || 0.35) * 100)}%</span>
+                </div>
+                <input type="range" id="bright-slider" min="0.1" max="1.0" step="0.05" value="${config.bgBrightness || 0.35}">
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="panel-translation">
+            <div class="settings-section-title">Translation & Features</div>
+            <div class="settings-group-card">
+              <div class="setting-row">
+                <label class="toggle-label" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <span>${t('settings_trans')}</span>
+                  <input type="checkbox" id="trans-toggle">
+                </label>
+              </div>
+              <div class="setting-row">
+                <label class="toggle-label" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <span>${t('settings_fast_mode')}</span>
+                  <input type="checkbox" id="fast-mode-toggle">
+                </label>
+              </div>
+              <div class="setting-row" id="shared-trans-row" style="flex-direction:column; align-items:stretch; gap:10px;">
+                <label class="toggle-label" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <span>${t('settings_shared_trans')}</span>
+                  <input type="checkbox" id="shared-trans-toggle">
+                </label>
+                <div id="shared-trans-note" style="font-size:12px; opacity:0.7; line-height:1.4; display:none; white-space:pre-line; background:rgba(0,0,0,0.2); padding:10px; border-radius:8px;"></div>
+                <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                  <span style="font-size:12px; opacity:0.8;">共有翻訳 残り文字数</span>
+                  <span id="community-remaining-val" style="font-size:12px; opacity:0.7; font-weight:600; font-variant-numeric: tabular-nums;">--</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-group-card">
+               <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                  <div class="ytm-lang-label">${t('settings_main_lang')}</div>
+                  <div class="ytm-lang-group" id="main-lang-group">
+                    <button class="ytm-lang-pill" data-value="original">Original</button>
+                    <button class="ytm-lang-pill" data-value="ja">日本語</button>
+                    <button class="ytm-lang-pill" data-value="en">English</button>
+                    <button class="ytm-lang-pill" data-value="ko">한국어</button>
+                  </div>
+               </div>
+               <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                  <div class="ytm-lang-label">${t('settings_sub_lang')}</div>
+                  <div class="ytm-lang-group" id="sub-lang-group">
+                    <button class="ytm-lang-pill" data-value="original">Original</button>
+                    <button class="ytm-lang-pill" data-value="ja">日本語</button>
+                    <button class="ytm-lang-pill" data-value="en">English</button>
+                    <button class="ytm-lang-pill" data-value="ko">한국어</button>
+                    <button class="ytm-lang-pill" data-value="zh">中文</button>
+                  </div>
+               </div>
+               <div class="setting-row" style="display:block;">
+                 <div style="font-size:12px; margin-bottom:8px; opacity:0.7; font-weight:500;">DeepL API Key (Optional)</div>
+                 <input type="password" id="deepl-key-input" class="setting-input-text" placeholder="Paste your API key here">
+               </div>
+            </div>
+            
+            <div class="settings-group-card">
+               <div class="setting-row" style="flex-direction:column; align-items:stretch; gap:12px;">
+                  <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; font-weight:500;">${t('settings_sync_offset')}</span>
+                    <input type="number" id="sync-offset-input" placeholder="0" style="width:70px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:8px; padding:6px 8px; text-align:right; outline:none;">
+                  </div>
+                  <label class="toggle-label" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px; opacity:0.7;">${t('settings_sync_offset_save')}</span>
+                    <input type="checkbox" id="sync-offset-save-toggle">
+                  </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="panel-data">
+            <div class="settings-section-title">Data Management</div>
+            <div class="settings-group-card">
+              <div class="setting-row" style="display:block;">
+                <button id="delete-current-cache-btn" class="settings-action-btn btn-danger" ${hasCurrentSong ? '' : 'disabled style="opacity:0.5; cursor:not-allowed;"'} style="display:flex; align-items:center; justify-content:center; gap:8px;">
+                  ${ICONS.trash} この曲の歌詞データを削除
+                </button>
+                <div style="font-size:11px; opacity:0.5; margin-top:8px; text-align:center;">
+                  現在再生中の曲の歌詞キャッシュのみを削除します
+                </div>
+              </div>
+              <div class="setting-row" style="display:block;">
+                 <button id="clear-all-btn" class="settings-action-btn" style="background:rgba(255,255,255,0.1); color:#fff;">
+                   設定をリセット (Reset All)
+                 </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     `;
+    // --- Tab Switching Logic ---
+    const tabs = ui.settings.querySelectorAll('.settings-tab-btn');
+    const panels = ui.settings.querySelectorAll('.settings-panel');
 
-    // 値の反映
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        
+        tab.classList.add('active');
+        const tabId = tab.getAttribute('data-tab');
+        ui.settings.querySelector(`#panel-${tabId}`).classList.add('active');
+      });
+    });
+    
+    
+        // 値の反映
     document.getElementById('deepl-key-input').value = config.deepLKey || '';
     document.getElementById('trans-toggle').checked = config.useTrans;
     document.getElementById('fast-mode-toggle').checked = !!config.fastMode;
@@ -2628,7 +2656,7 @@ function renderSettingsPanel() {
     };
 
     const replayBtnConfig = {
-      txt: '📊',
+      txt: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>',
       cls: 'icon-btn',
       click: () => {
         if (!ui.replayPanel) {
@@ -2641,7 +2669,7 @@ function renderSettingsPanel() {
 
     
     const settingsBtnConfig = {
-      txt: '⚙️',
+      txt: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
       cls: 'icon-btn',
       click: async () => {
         initSettings();
