@@ -508,21 +508,26 @@ body.ytm-custom-layout ytmusic-av-toggle[playback-mode=ATV_PREFERRED] .song-butt
 #trans-toggle,
 #shared-trans-toggle,
 #sync-offset-save-toggle,
-#fast-mode-toggle {  /* ←ここに追加 */
+#fast-mode-toggle,
+#left-align-toggle {
   appearance: none;
-  width: 40px;
-  height: 22px;
+  width: 42px;
+  height: 24px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  border-radius: 12px;
   position: relative;
-  transition: 0.3s;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
 }
 
 /* 2. ONになったときの色（緑色） */
 #trans-toggle:checked,
 #shared-trans-toggle:checked,
 #sync-offset-save-toggle:checked,
-#fast-mode-toggle:checked {  
+#fast-mode-toggle:checked,
+#left-align-toggle:checked {  
   background: #34c759;
 }
 
@@ -530,25 +535,29 @@ body.ytm-custom-layout ytmusic-av-toggle[playback-mode=ATV_PREFERRED] .song-butt
 #trans-toggle::after,
 #shared-trans-toggle::after,
 #sync-offset-save-toggle::after,
-#fast-mode-toggle::after { 
+#fast-mode-toggle::after,
+#left-align-toggle::after { 
   content: '';
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background: #fff;
   border-radius: 50%;
-  transition: 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
 }
 
 /* 4. ONになったときの丸ポチの移動 */
 #trans-toggle:checked::after,
 #shared-trans-toggle:checked::after,
 #sync-offset-save-toggle:checked::after,
-#fast-mode-toggle:checked::after {  
+#fast-mode-toggle:checked::after,
+#left-align-toggle:checked::after {  
   transform: translateX(18px);
 }
+
 
 .ytm-lang-section {
   margin-top: 10px;
@@ -2553,3 +2562,26 @@ body.ytm-custom-layout ytmusic-nav-bar .left-content #guide-button {
   text-overflow: ellipsis;
 }
 
+
+body.ytm-align-left #ytm-custom-left-col {
+  align-items: flex-start;
+  text-align: left;
+}
+
+body.ytm-align-left #ytm-custom-info-area {
+  align-items: flex-start;
+  padding: 0; /* 左端に寄せるためにパディングを調整 */
+}
+
+body.ytm-align-left #ytm-custom-title {
+  text-align: left;
+  margin-left: 0;
+}
+
+body.ytm-align-left #ytm-custom-artist {
+  text-align: left;
+}
+
+body.ytm-align-left #ytm-btn-area {
+  justify-content: flex-start;
+}
