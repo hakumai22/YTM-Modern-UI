@@ -2100,6 +2100,13 @@ function renderSettingsPanel() {
               <input type="range" id="weight-slider" min="100" max="900" step="100" value="${config.lyricWeight || 800}" style="width:100%;">
             </div>
 
+            <div class="setting-row">
+              <label class="toggle-label" style="width:100%;">
+                <span>${t('settings_left_align')}</span>
+                <input type="checkbox" id="left-align-toggle">
+              </label>
+            </div>
+
             <div class="setting-row" style="flex-direction:column; align-items:stretch; gap:12px;">
                <div style="display:flex; justify-content:space-between; font-size:13px;">
                 <span>背景の明るさ (Brightness)</span>
@@ -2222,6 +2229,7 @@ function renderSettingsPanel() {
     document.getElementById('trans-toggle').checked = config.useTrans;
     document.getElementById('fast-mode-toggle').checked = !!config.fastMode;
     document.getElementById('shared-trans-toggle').checked = !!config.useSharedTranslateApi;
+    document.getElementById('left-align-toggle').checked = !!config.leftAlignInfo;
     // Fast Mode のときは共有翻訳を強制OFF（トグルは表示したまま無効化）
     const fastToggleEl = document.getElementById('fast-mode-toggle');
     if (fastToggleEl) {
@@ -2289,6 +2297,7 @@ function renderSettingsPanel() {
       config.useTrans = document.getElementById('trans-toggle').checked;
       config.useSharedTranslateApi = document.getElementById('shared-trans-toggle').checked;
       config.fastMode = document.getElementById('fast-mode-toggle').checked;
+      config.leftAlignInfo = document.getElementById('left-align-toggle').checked;
       config.lyricWeight = document.getElementById('weight-slider').value;
       config.bgBrightness = document.getElementById('bright-slider').value;
       
@@ -2301,6 +2310,8 @@ function renderSettingsPanel() {
       storage.set('ytm_trans_enabled', config.useTrans);
       storage.set('ytm_shared_trans_enabled', config.useSharedTranslateApi);
       storage.set('ytm_fast_mode', config.fastMode);
+      storage.set('ytm_left_align', config.leftAlignInfo);
+      document.body.classList.toggle('ytm-align-left', !!config.leftAlignInfo);
       storage.set('ytm_main_lang', config.mainLang);
       storage.set('ytm_sub_lang', config.subLang);
       storage.set('ytm_ui_lang', config.uiLang);
@@ -3868,6 +3879,11 @@ trySetArtistLink();
       config.bgBrightness = savedBright;
       document.documentElement.style.setProperty('--ytm-bg-brightness', savedBright);
     }
+
+    // 3. 左揃えオプション
+    const leftAlignStored = await storage.get('ytm_left_align');
+    if (leftAlignStored !== null) config.leftAlignInfo = leftAlignStored;
+    document.body.classList.toggle('ytm-align-left', !!config.leftAlignInfo);
   })();
   
   
