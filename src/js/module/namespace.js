@@ -156,7 +156,8 @@
     saveSyncOffset: false,
     useSharedTranslateApi: false,
     leftAlignInfo: false,
-    appleBg: true
+    appleBg: true,
+    useLrcLibFallback: true
   };
 
   // フォールバック言語
