@@ -287,15 +287,20 @@ if (req.type === 'GET_CLOUD_STATE') {
 
   // 歌詞取得
   if (req.type === 'GET_LYRICS') {
-    const { track, artist, youtube_url, video_id } = req.payload || {};
+    const { track, artist, youtube_url, video_id, use_lrclib = true } = req.payload || {};
     const tabId = sender && sender.tab ? sender.tab.id : null;
 
     console.log('[BG] GET_LYRICS (Hub + GitHub)', { track, artist });
 
-    (async () => {
-      const timeoutMs = 15000;
+(async () => {
+              const timeoutMs = 3000; 
 
-      const mergeCandidateLists = (...lists) => {
+              
+              const pLrcLib = use_lrclib 
+                ? API.fetchFromLrcLib(track, artist).catch(() => null) 
+                : Promise.resolve(null);
+
+              const mergeCandidateLists = (...lists) => {
         const out = [];
         const seen = new Set();
         for (const list of lists) {
@@ -447,6 +452,28 @@ if (req.type === 'GET_CLOUD_STATE') {
       const sharedRequests = hubRes && !hubRes.error && hubRes.data && Array.isArray(hubRes.data.requests) ? hubRes.data.requests.slice() : [];
       const sharedMeaning = gitRes && !gitRes.error && gitRes.data ? (gitRes.data.meaningData || null) : null;
       const hasCandidates = sharedCandidates.length > 0;
+
+      if (use_lrclib) {
+                try {
+                  const lrcLibRes = await pLrcLib; 
+                  if (lrcLibRes && typeof lrcLibRes.lyrics === 'string' && lrcLibRes.lyrics.trim()) {
+                                  const mergedCandidates = mergeCandidateLists(lrcLibRes.candidates || [], sharedCandidates);
+            sendOnce({
+              success: true,
+              lyrics: lrcLibRes.lyrics,
+              dynamicLines: null,
+              subLyrics: '',
+              hasSelectCandidates: mergedCandidates.length > 0,
+              candidates: mergedCandidates,
+              config: sharedConfig,
+              requests: sharedRequests,
+              meaningData: sharedMeaning,
+              githubFallback: true,
+            });
+            return;
+          }
+        } catch (e) {}
+      }
 
       console.log('[BG] No lyrics found (Hub+GitHub)');
       sendOnce({
